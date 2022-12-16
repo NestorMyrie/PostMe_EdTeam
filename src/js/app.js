@@ -23,6 +23,11 @@ const closePostModal = () => {
 
 
 
+window.addEventListener('beforeinstallprompt',(e) => {
+  e.preventDefault()
+  deferredPrompt=e
+})
+
 window.addEventListener('load', async () => {
 
     MAIN = document.querySelector('#main');
@@ -42,5 +47,18 @@ window.addEventListener('load', async () => {
     }
      }
     }
+
+
+    const bannerInstall = document.querySelector('#banner-install');
+    bannerInstall.addEventListener('click', async () => {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        const response = await deferredPrompt.userChoice;
+        if (response.outcome === 'dismissed') {
+          console.error('El usuario cancelo la instalación');
+        }
+      }
+    });
+      
 
 })
